@@ -383,7 +383,7 @@ jobs:
           # draft and prerelease may need to be changed be manually
           draft: true
           prerelease: true
-          tag: ${{ steps.tag.outputs.tag }}
+          tag_name: ${{ steps.tag.outputs.tag }}
           body_path: dist/recent-changes
           files: |
             dist/argo-*.gz*
