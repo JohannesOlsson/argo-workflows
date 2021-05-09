@@ -354,6 +354,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: /home/runner/.cache/go-build
+          key: GOCACHE-v2-${{ hashFiles('**/go.mod') }}
+      - uses: actions/cache@v2
+        with:
+          path: /home/runner/go/pkg/mod
+          key: GOMODCACHE-v2-${{ hashFiles('**/go.mod') }}
       # https://stackoverflow.com/questions/58033366/how-to-get-current-branch-within-github-actions
       - name: Get tag
         run: |
