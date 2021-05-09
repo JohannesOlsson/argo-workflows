@@ -363,6 +363,7 @@ jobs:
           fi
           echo "##[set-output name=tag;]$tag"
         id: tag
+      - run: mkdir dist
       - run: git log -n10 --oneline > dist/recent-changes
       - run: go mod download
       - run: make dist/argo-linux-amd64.gz STATIC_FILES=false
