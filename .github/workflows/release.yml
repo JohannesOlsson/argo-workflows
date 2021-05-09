@@ -354,6 +354,15 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      # https://stackoverflow.com/questions/58033366/how-to-get-current-branch-within-github-actions
+      - name: Get tag
+        run: |
+          tag=$(basename $GITHUB_REF)
+          if [ $tag = "master" ]; then
+            tag="latest"
+          fi
+          echo "##[set-output name=tag;]$tag"
+        id: tag
       - run: git log -n10 --oneline > dist/recent-changes
       - run: go mod download
       - run: make dist/argo-linux-amd64.gz STATIC_FILES=false
@@ -365,6 +374,7 @@ jobs:
           # draft and prerelease may need to be changed be manually
           draft: true
           prerelease: true
+          tag: ${{ steps.tag.outputs.tag }}
           body_path: dist/recent-changes
           files: |
             dist/argo-*.gz*
