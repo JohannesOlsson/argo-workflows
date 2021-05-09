@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Release
 
 on:
   push:
@@ -347,3 +347,31 @@ jobs:
             docker pull $image_name
             docker pull quay.io/$image_name
           done
+
+
+  clis:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: make clis checksums
+
+      - name: Draft release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          prerelease: true
+          files: |
+            dist/argo-darwin-amd64.gz
+            dist/argo-darwin-amd64.gz.sha256
+            dist/argo-linux-amd64.gz
+            dist/argo-linux-amd64.gz.sha256
+            dist/argo-linux-arm64.gz
+            dist/argo-linux-arm64.gz.sha256
+            dist/argo-linux-ppc64le.gz
+            dist/argo-linux-ppc64le.gz.sha256
+            dist/argo-linux-s390x.gz
+            dist/argo-linux-s390x.gz.sha256
+            dist/argo-windows-amd64.gz
+            dist/argo-windows-amd64.gz.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
