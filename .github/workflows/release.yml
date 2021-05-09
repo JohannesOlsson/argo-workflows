@@ -367,17 +367,6 @@ jobs:
           prerelease: true
           body_path: dist/recent-changes
           files: |
-          #  dist/argo-darwin-amd64.gz
-          #  dist/argo-darwin-amd64.gz.sha256
-            dist/argo-linux-amd64.gz
-            dist/argo-linux-amd64.gz.sha256
-          #  dist/argo-linux-arm64.gz
-          #  dist/argo-linux-arm64.gz.sha256
-          #  dist/argo-linux-ppc64le.gz
-          #  dist/argo-linux-ppc64le.gz.sha256
-          #  dist/argo-linux-s390x.gz
-          #  dist/argo-linux-s390x.gz.sha256
-          #  dist/argo-windows-amd64.gz
-          #  dist/argo-windows-amd64.gz.sha256
+            dist/argo-*.gz*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
