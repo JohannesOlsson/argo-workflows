@@ -350,28 +350,34 @@ jobs:
 
 
   clis:
+    name: Build & publish CLIs
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - run: make clis checksums
-
+      - run: go mod download
+      - run: make dist/argo-linux-amd64.gz STATIC_FILES=false
+      - run: make checksums
+      - run: git log -n10 --oneline > dist/recent-changes
+      # https://github.com/softprops/action-gh-release
       - name: Draft release
         uses: softprops/action-gh-release@v1
         with:
+          # draft and prerelease may need to be changed be manually
           draft: true
           prerelease: true
+          body_path: dist/recent-changes
           files: |
-            dist/argo-darwin-amd64.gz
-            dist/argo-darwin-amd64.gz.sha256
+          #  dist/argo-darwin-amd64.gz
+          #  dist/argo-darwin-amd64.gz.sha256
             dist/argo-linux-amd64.gz
             dist/argo-linux-amd64.gz.sha256
-            dist/argo-linux-arm64.gz
-            dist/argo-linux-arm64.gz.sha256
-            dist/argo-linux-ppc64le.gz
-            dist/argo-linux-ppc64le.gz.sha256
-            dist/argo-linux-s390x.gz
-            dist/argo-linux-s390x.gz.sha256
-            dist/argo-windows-amd64.gz
-            dist/argo-windows-amd64.gz.sha256
+          #  dist/argo-linux-arm64.gz
+          #  dist/argo-linux-arm64.gz.sha256
+          #  dist/argo-linux-ppc64le.gz
+          #  dist/argo-linux-ppc64le.gz.sha256
+          #  dist/argo-linux-s390x.gz
+          #  dist/argo-linux-s390x.gz.sha256
+          #  dist/argo-windows-amd64.gz
+          #  dist/argo-windows-amd64.gz.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
