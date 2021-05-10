@@ -353,6 +353,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          # 0 indicates all history for all branches and tags.
+          fetch-depth: 0
       - uses: actions/setup-node@v1
         with:
           node-version: "14"
@@ -380,6 +383,8 @@ jobs:
           fi
           echo "##[set-output name=tag;]$tag"
         id: tag
+      - run: mkdir dist
+      - run: git log -n10 --oneline | tee dist/changelog
       - run: go mod download
       - run: make clis STATIC_FILES=true
       - run: make checksums
@@ -390,6 +395,7 @@ jobs:
           draft: true
           prerelease: true
           tag_name: ${{ steps.tag.outputs.tag }}
+          body_path: dist/changelog
           files: |
             dist/argo-*.gz
             dist/argo-*.gz.sha256
