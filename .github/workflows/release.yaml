@@ -383,8 +383,7 @@ jobs:
           fi
           echo "##[set-output name=tag;]$tag"
         id: tag
-      - run: mkdir dist
-      - run: git log -n10 --oneline | tee dist/changelog
+      - run: make changelog
       - run: go mod download
       - run: make clis STATIC_FILES=true
       - run: make checksums
@@ -395,9 +394,10 @@ jobs:
           draft: true
           prerelease: true
           tag_name: ${{ steps.tag.outputs.tag }}
-          body_path: dist/changelog
+          body_path: dist/changelog.md
           files: |
             dist/argo-*.gz
             dist/argo-*.gz.sha256
+            manifests/*.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
