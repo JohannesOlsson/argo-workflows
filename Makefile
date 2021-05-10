@@ -593,8 +593,8 @@ ifeq ($(GIT_BRANCH),master)
 	git log --oneline -n10 --format=%an | sort -u > dist/contributors
 else
 	# on a branch we show all commits since master
-	git log --oneline    master..$(GIT_BRANCH) > dist/changes
-	git log --format=%an master..$(GIT_BRANCH) | sort -u > dist/contributors
+	git log --oneline    master.. > dist/changes
+	git log --format=%an master.. | sort -u > dist/contributors
 endif
 	echo '## Changes' > dist/changelog.md
 	cat dist/changes >> dist/changelog.md

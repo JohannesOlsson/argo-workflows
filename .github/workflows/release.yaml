@@ -384,7 +384,7 @@ jobs:
           echo "##[set-output name=tag;]$tag"
         id: tag
       # it seems the checkout action only gets the current branch
-      - run: git fetch origin master
+      - run: git fetch origin
       - run: make changelog
       - run: go mod download
       - run: make clis STATIC_FILES=true
