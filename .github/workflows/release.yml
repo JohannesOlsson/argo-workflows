@@ -383,7 +383,7 @@ jobs:
         id: tag
       - run: go mod download
       - run: git diff --exit-code
-      - run: make dist/argo-linux-amd64.gz STATIC_FILES=true
+      - run: make dist/argo-darwin-amd64.gz STATIC_FILES=true
       - run: make checksums
       # https://github.com/softprops/action-gh-release
       - name: Draft release
