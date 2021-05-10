@@ -348,7 +348,6 @@ jobs:
             docker pull quay.io/$image_name
           done
 
-
   clis:
     name: Build & publish CLIs
     runs-on: ubuntu-20.04
@@ -382,13 +381,12 @@ jobs:
           echo "##[set-output name=tag;]$tag"
         id: tag
       - run: go mod download
-      - run: make dist/argo-darwin-amd64.gz STATIC_FILES=true
+      - run: make clis STATIC_FILES=true
       - run: make checksums
       # https://github.com/softprops/action-gh-release
       - name: Draft release
         uses: softprops/action-gh-release@v1
         with:
-          # draft and prerelease may need to be changed be manually
           draft: true
           prerelease: true
           tag_name: ${{ steps.tag.outputs.tag }}
