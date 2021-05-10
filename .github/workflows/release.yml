@@ -354,6 +354,16 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+      - uses: actions/cache@v1
+        with:
+          path: ui/node_modules
+          key: ${{ runner.os }}-node-dep-v1-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "1.15.7"
       - uses: actions/cache@v2
         with:
           path: /home/runner/.cache/go-build
@@ -362,19 +372,10 @@ jobs:
         with:
           path: /home/runner/go/pkg/mod
           key: GOMODCACHE-v2-${{ hashFiles('**/go.mod') }}
-      # https://stackoverflow.com/questions/58033366/how-to-get-current-branch-within-github-actions
-      - name: Get tag
-        run: |
-          tag=$(basename $GITHUB_REF)
-          if [ $tag = "master" ]; then
-            tag="latest"
-          fi
-          echo "##[set-output name=tag;]$tag"
-        id: tag
       - run: mkdir dist
-      - run: git log -n10 --oneline > dist/recent-changes
+      - run: git log -n10 --oneline | tee dist/recent-changes
       - run: go mod download
-      - run: make dist/argo-linux-amd64.gz STATIC_FILES=false
+      - run: make dist/argo-linux-amd64.gz STATIC_FILES=true
       - run: make checksums
       # https://github.com/softprops/action-gh-release
       - name: Draft release
@@ -383,7 +384,6 @@ jobs:
           # draft and prerelease may need to be changed be manually
           draft: true
           prerelease: true
-          tag_name: ${{ steps.tag.outputs.tag }}
           body_path: dist/recent-changes
           files: |
             dist/argo-*.gz*
