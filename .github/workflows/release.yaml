@@ -357,7 +357,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "14"
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: ui/node_modules
           key: ${{ runner.os }}-node-dep-v1-${{ hashFiles('**/yarn.lock') }}
@@ -382,7 +382,6 @@ jobs:
           echo "##[set-output name=tag;]$tag"
         id: tag
       - run: go mod download
-      - run: git diff --exit-code
       - run: make dist/argo-darwin-amd64.gz STATIC_FILES=true
       - run: make checksums
       # https://github.com/softprops/action-gh-release
